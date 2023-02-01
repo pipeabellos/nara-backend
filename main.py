@@ -145,13 +145,13 @@ def handle_webhook():
   print(data["webhook"]["id"])
 
   #new phone record airtable webhook_id=ach2AK5mRBKuuBa39
-  if data["webhook"]["id"] == "achlqVkbsnATQUgOf":
+  if data["webhook"]["id"] == "achstVAIE1UbWlCyR":
     get_number_from_db("onboard")
     print("Webhook received")
     return 'Webhook received'
 
   #new phone record airtable webhook_id=achQedJW1CUFW0IYp
-  if data["webhook"]["id"] == "achQedJW1CUFW0IYp":
+  if data["webhook"]["id"] == "achzg27lyPn1Q8aLT":
     get_number_from_db("pdf_uploaded")
     print("Webhook received")
     return 'Webhook received'
