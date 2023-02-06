@@ -4,7 +4,7 @@ import json
 
 
 def conversation(message, conversationId="", parentMessageId=""):
-  url = "https://63c5-136-24-133-74.ngrok.io/conversation"
+  url = "https://nara-ai-d19g-tcpv.zeet-nara.zeet.app/conversation"
   
   payload_data = {
     "message": message
