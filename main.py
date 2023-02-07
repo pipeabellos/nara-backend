@@ -151,7 +151,7 @@ def handle_webhook():
     return 'Webhook received'
 
   #new phone record airtable webhook_id=achQedJW1CUFW0IYp
-  if data["webhook"]["id"] == "achzg27lyPn1Q8aLT":
+  if data["webhook"]["id"] == "achVOsJ8PVRaHcRwr":
     get_number_from_db("pdf_uploaded")
     print("Webhook received (pdf_uploaded)")
     return 'Webhook received'
