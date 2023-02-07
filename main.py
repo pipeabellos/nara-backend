@@ -73,7 +73,7 @@ def get_number_from_db(step, from_number=''):
     print('---------')
 
   elif step == "conversation":
-    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations?view=Grid%20view&filterByFormula={phone}=" + from_number
+    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations?view=Grid%20view&filterByFormula={phone}=" + str(from_number)
     response = requests.request("GET", url, headers=headers, data=payload)
     print('---------')
     data = response.json()
