@@ -126,6 +126,28 @@ def upsert_airtable_conversation(phone_number, conversationId,
 
   print(response.text)
 
+def add_cronjob(webhook_id):
+    from crontab import CronTab
+    import requests
+
+    # Initialize cron
+    cron = CronTab(user='root')
+
+    # Define the curl command
+    curl_command = 'curl -X POST "https://api.airtable.com/v0/bases/apppUZDPLKrTBobih/webhooks/' + webhook_id + '/refresh" -H "Authorization: Bearer ' + airtable_api
+
+    # Add the cronjob
+    job = cron.new(command=curl_command)
+
+    # Set the time to run the cronjob (midnight every day)
+    job.minute.every(0)
+    job.hour.every(0)
+
+    # Enable the cronjob
+    job.enable()
+
+    # Write the cronjob to the crontab
+    cron.write()
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -201,3 +223,5 @@ def sms_reply():
 web.run(app)
 if __name__ == '__main__':
   app.run(debug=True)
+  add_cronjob("achstVAIE1UbWlCyR")
+  add_cronjob("achVOsJ8PVRaHcRwr")
