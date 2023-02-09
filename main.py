@@ -111,7 +111,7 @@ def upsert_airtable_conversation(phone_number, context,
       "fields": {
         "phone": phone_number,
         "context": context,
-        "lastParentMessageId": lastPrompt
+        "lastPrompt": lastPrompt
       }
     }]
   })
