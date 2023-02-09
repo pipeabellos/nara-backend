@@ -3,14 +3,14 @@ from io import BytesIO
 import json
 
 
-def conversation(message, conversationId="", parentMessageId=""):
-  url = "https://nara-ai-d19g-tcpv.zeet-nara.zeet.app/conversation"
+def conversation(message, context="", lastPrompt=""):
+  url = "https://nara-conversation-usc4.zeet-nara.zeet.app/conversation"
   
   payload_data = {
     "message": message
   }
   
-  payload_data.update({k: v for k, v in zip(("conversationId", "parentMessageId"), (conversationId, parentMessageId)) if v})
+  payload_data.update({k: v for k, v in zip(("context", "lastPrompt"), (context, lastPrompt)) if v})
   
   payload = json.dumps(payload_data)
   
@@ -22,7 +22,7 @@ def conversation(message, conversationId="", parentMessageId=""):
 
   json_response = response.json()
   response_message = json_response['response']
-  conversation_id = json_response['conversationId']
+  conversation_id = json_response['context']
   message_id = json_response['messageId']
   return response_message, conversation_id, message_id
 
