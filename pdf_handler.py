@@ -22,9 +22,9 @@ def conversation(message, context="", lastPrompt=""):
 
   json_response = response.json()
   response_message = json_response['response']
-  conversation_id = json_response['context']
-  message_id = json_response['messageId']
-  return response_message, conversation_id, message_id
+  context = json_response['context']
+  last_prompt = json_response['lastPrompt']
+  return response_message, context, last_prompt
 
 
 def train_pdf_file(url):

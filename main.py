@@ -41,8 +41,8 @@ def get_number_from_db(step, from_number=''):
       # get pdf url and train chatgpt
       texts = train_pdf_file(data['records'][0]['fields']['pdf_url'])
 
-      conversationId = ""
-      parentMessageId = ""
+      context = ""
+      lastPrompt = ""
       index = 0
 
       for index, text in enumerate(texts):
@@ -52,23 +52,21 @@ def get_number_from_db(step, from_number=''):
         message = init_message + text
         print(message)
 
-        response_message, conversation_id, message_id = conversation(
-          message, conversationId, parentMessageId)
+        response_message, context, lastPrompt = conversation(
+          message, context, lastPrompt)
         print(response_message)
-        parentMessageId = message_id
-        conversationId = conversation_id
         
         if index == len(texts) - 1:  # check if this is the last loop
             # add an additional loop with a different message
             message = "Those where the last part of the meal plan PDF. From now on, please answer all questions according to the information presented in the sum of all previous parts. If you are not certain about an answer, please abstain from making up any answer according to information outside of the meal plan provided and answer with something similar to \"I can't find any information related to that question in the meal plan provided\"."
-            response_message, conversation_id, message_id = conversation(
-              message, conversationId, parentMessageId)
+            response_message, context, lastPrompt = conversation(
+              message, context, lastPrompt)
             print(response_message)
 
       update_first_message_sent(record['id'], "PDFs")
       send_sms('+1' + str(record['fields']['phone']), "trained_finished")
-      upsert_airtable_conversation(int(record['fields']['phone']), conversationId,
-                                   parentMessageId)
+      upsert_airtable_conversation(int(record['fields']['phone']), context,
+                                   lastPrompt)
       print(record)
     print('---------')
 
@@ -101,7 +99,7 @@ def update_first_message_sent(record_id, table_name):
   print(response.text)
 
 
-def upsert_airtable_conversation(phone_number, conversationId,
+def upsert_airtable_conversation(phone_number, context,
                                  lastParentMessageId):
   url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations"
 
@@ -112,7 +110,7 @@ def upsert_airtable_conversation(phone_number, conversationId,
     "records": [{
       "fields": {
         "phone": phone_number,
-        "conversationId": conversationId,
+        "context": context,
         "lastParentMessageId": lastParentMessageId
       }
     }]
@@ -194,21 +192,20 @@ def sms_reply():
   #Check if from_number exists in
   if active_conversations["records"] != []:
     print("From number exists in conversation")
-    print(active_conversations["records"][0]["fields"]["conversationId"])
-    conversationId = active_conversations["records"][0]["fields"][
-      "conversationId"]
-    parentMessageId = active_conversations["records"][0]["fields"][
+    print(active_conversations["records"][0]["fields"]["context"])
+    context = active_conversations["records"][0]["fields"][
+      "context"]
+    lastPrompt = active_conversations["records"][0]["fields"][
       "lastParentMessageId"]
 
-    response_message, conversation_id, message_id = conversation(
-      body, conversationId, parentMessageId)
+    response_message, context, lastPrompt = conversation(
+      body, context, lastPrompt)
     print(response_message)
-    parentMessageId = message_id
-    conversationId = conversation_id
+
 
     send_sms(str(from_number), "message", response_message)
-    upsert_airtable_conversation(int(from_number), conversationId,
-                                 parentMessageId)
+    upsert_airtable_conversation(int(from_number), context,
+                                 lastPrompt)
 
     # Add a message
     resp = MessagingResponse()
