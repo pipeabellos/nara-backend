@@ -7,7 +7,7 @@ def conversation(message, context="", lastPrompt=""):
   url = "https://nara-conversation-usc4.zeet-nara.zeet.app/conversation"
   
   payload_data = {
-    "message": message
+    "prompt": message
   }
   
   payload_data.update({k: v for k, v in zip(("context", "lastPrompt"), (context, lastPrompt)) if v})

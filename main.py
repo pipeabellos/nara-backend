@@ -203,9 +203,6 @@ def sms_reply():
       body, context, lastPrompt)
     print(response_message)
 
-    lastPrompt = active_conversations["records"][0]["fields"][
-      "lastPrompt"]
-
     send_sms(str(from_number), "message", response_message)
     upsert_airtable_conversation(int(from_number), context,
                                  lastPrompt)
