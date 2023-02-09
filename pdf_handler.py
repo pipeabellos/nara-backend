@@ -24,6 +24,7 @@ def conversation(message, context="", lastPrompt=""):
   response_message = json_response['response']
   context = json_response['context']
   last_prompt = json_response['lastPrompt']
+  print(json_response)
   return response_message, context, last_prompt
 
 

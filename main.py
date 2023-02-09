@@ -199,7 +199,7 @@ def sms_reply():
     lastPrompt = active_conversations["records"][0]["fields"][
       "lastPrompt"]
 
-    response_message, context, lastPrompt = conversation(
+    response_message, context = conversation(
       body, context, lastPrompt)
     print(response_message)
 
