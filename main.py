@@ -200,7 +200,7 @@ def sms_reply():
       "lastPrompt"]
 
     response_message, context = conversation(
-      body, context, lastPrompt)
+      body, context)
     print(response_message)
 
 
