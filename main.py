@@ -160,6 +160,7 @@ def index():
 @app.route('/new_phone', methods=['POST'])
 def handle_webhook():
   # Get the data from the webhook request
+  print("received webhook")
   data = request.get_json()
   print(data)
   print(data["webhook"]["id"])
