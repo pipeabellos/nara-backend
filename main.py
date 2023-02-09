@@ -100,7 +100,7 @@ def update_first_message_sent(record_id, table_name):
 
 
 def upsert_airtable_conversation(phone_number, context,
-                                 lastParentMessageId):
+                                 lastPrompt):
   url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations"
 
   payload = json.dumps({
@@ -111,7 +111,7 @@ def upsert_airtable_conversation(phone_number, context,
       "fields": {
         "phone": phone_number,
         "context": context,
-        "lastParentMessageId": lastParentMessageId
+        "lastParentMessageId": lastPrompt
       }
     }]
   })
