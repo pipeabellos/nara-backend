@@ -196,13 +196,13 @@ def sms_reply():
     print(active_conversations["records"][0]["fields"]["context"])
     context = active_conversations["records"][0]["fields"][
       "context"]
-    lastPrompt = active_conversations["records"][0]["fields"][
-      "lastPrompt"]
 
-    response_message, context = conversation(
-      body, context)
+    response_message, context, lastPrompt = conversation(
+      body, context, lastPrompt)
     print(response_message)
 
+    lastPrompt = active_conversations["records"][0]["fields"][
+      "lastPrompt"]
 
     send_sms(str(from_number), "message", response_message)
     upsert_airtable_conversation(int(from_number), context,
