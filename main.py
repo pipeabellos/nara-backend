@@ -196,7 +196,7 @@ def sms_reply():
     context = active_conversations["records"][0]["fields"][
       "context"]
     lastPrompt = active_conversations["records"][0]["fields"][
-      "lastParentMessageId"]
+      "lastPrompt"]
 
     response_message, context, lastPrompt = conversation(
       body, context, lastPrompt)
