@@ -52,8 +52,8 @@ def get_number_from_db(step, from_number=''):
       # update airtable and send sms
       update_first_message_sent(record['id'], "PDFs")
       send_sms('+1' + str(record['fields']['phone']), "trained_finished")
-      upsert_airtable_conversation(int(record['fields']['phone']), context,
-                                   lastPrompt)
+      upsert_airtable_conversation(int(record['fields']['phone']), context="NA",
+                                   lastPrompt="NA")
       print(record)
     print('---------')
 
@@ -137,7 +137,7 @@ def add_cronjob(webhook_id):
 def get_xavatarpath(phone_number):
 
   print(supabase_anon)
-  url = "https://qmnzwxeqrxmuvutgedtr.supabase.co/rest/v1/hello_user_avatars?select=avatar_id,hello_avatars(url_path)&user_phone=eq." + phone_number + "&order=created_at.desc&limit=1"
+  url = "https://qmnzwxeqrxmuvutgedtr.supabase.co/rest/v1/hello_user_avatars?select=avatar_id,hello_avatars(url_path)&user_phone=eq." + str(phone_number) + "&order=created_at.desc&limit=1"
 
   payload={}
   headers = {
