@@ -10,8 +10,14 @@ from replit import db, web
 from functools import wraps
 from sms_handler import send_sms
 from pdf_handler import train_pdf_file, conversation
+from supabase_handler import new_file
+from nara_endpoints import train, build_prompt
+import dotenv
+
+dotenv.load_dotenv()
 
 airtable_api = os.environ.get("AIRTABLE_API")
+supabase_anon = os.environ.get("SUPABASE_ANON")
 
 
 def get_number_from_db(step, from_number=''):
@@ -37,32 +43,13 @@ def get_number_from_db(step, from_number=''):
     data = response.json()
     for record in data['records']:
       send_sms('+1' + str(record['fields']['phone']), "pdf_uploaded")
+      
+      # create avatar
+      XAVATARPATH = new_file(record['fields']['phone'], data['records'][0]['fields']['pdf_url'])
+      # train avatar
+      train(XAVATARPATH)
 
-      # get pdf url and train chatgpt
-      texts = train_pdf_file(data['records'][0]['fields']['pdf_url'])
-
-      context = ""
-      lastPrompt = ""
-      index = 0
-
-      for index, text in enumerate(texts):
-        init_message = "The following is the {} part of {} parts of a meal plan PDF.  Please respond with \"ok\": \n\n"
-        print("INDEX IS " + str(index))
-        init_message = init_message.format(index + 1, len(texts))
-        message = init_message + text
-        print(message)
-
-        response_message, context, lastPrompt = conversation(
-          message, context, lastPrompt)
-        print(response_message)
-        
-        if index == len(texts) - 1:  # check if this is the last loop
-            # add an additional loop with a different message
-            message = "Those where the last part of the meal plan PDF. From now on, please answer all questions according to the information presented in the sum of all previous parts. If you are not certain about an answer, please abstain from making up any answer according to information outside of the meal plan provided and answer with something similar to \"I can't find any information related to that question in the meal plan provided\"."
-            response_message, context, lastPrompt = conversation(
-              message, context, lastPrompt)
-            print(response_message)
-
+      # update airtable and send sms
       update_first_message_sent(record['id'], "PDFs")
       send_sms('+1' + str(record['fields']['phone']), "trained_finished")
       upsert_airtable_conversation(int(record['fields']['phone']), context,
@@ -147,8 +134,27 @@ def add_cronjob(webhook_id):
     # Write the cronjob to the crontab
     cron.write()
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+def get_xavatarpath(phone_number):
 
+  print(supabase_anon)
+  url = "https://qmnzwxeqrxmuvutgedtr.supabase.co/rest/v1/hello_user_avatars?select=avatar_id,hello_avatars(url_path)&user_phone=eq." + phone_number + "&order=created_at.desc&limit=1"
+
+  payload={}
+  headers = {
+    'apikey': supabase_anon,
+    'Authorization': 'Bearer ' + supabase_anon
+  }
+
+  response = requests.request("GET", url, headers=headers, data=payload)
+
+  print(response.text)
+  
+  data = json.loads(response.text)
+
+  return data[0]['hello_avatars']['url_path']
+
+
+app = Flask(__name__, static_folder='static', static_url_path='')
 
 # Main app
 @app.route("/")
@@ -216,6 +222,17 @@ def sms_reply():
 
   return ("success")
 
+@app.route("/prompt", methods=['POST'])
+def get_prompt():
+  data = request.get_json()
+  question = data["question"]
+  phone_number = data["phone"]
+
+  XAVATARPATH = get_xavatarpath(phone_number)
+
+  embedding = build_prompt(XAVATARPATH, question)
+  
+  return embedding
 
 web.run(app)
 if __name__ == '__main__':
