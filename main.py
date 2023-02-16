@@ -37,7 +37,7 @@ def get_number_from_db(step, from_number=''):
     print('---------')
 
   elif step == "pdf_uploaded":
-    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={first_message_sent} = ''&32q4321fields%5B%5D=phone"
+    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula=AND({first_message_sent} = '',{meal%20plan%20PDF} != '')&32q4321fields%5B%5D=phone"
     response = requests.request("GET", url, headers=headers, data=payload)
     print('---------')
     data = response.json()
