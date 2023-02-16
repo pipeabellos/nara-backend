@@ -20,13 +20,13 @@ def conversation(message, phone_number, context="", lastPrompt=""):
   }
   
   response = requests.request("POST", url, headers=headers, data=payload)
-
+  
   json_response = response.json()
   response_message = json_response['response']
   context = json_response['context']
   last_prompt = json_response['lastPrompt']
   print(json_response)
-  return response_message, context, last_prompt
+  return response_message, context, last_prompt, dialogue
 
 
 def train_pdf_file(url):
