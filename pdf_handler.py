@@ -20,6 +20,7 @@ def conversation(message, phone_number, context="", lastPrompt=""):
   }
   
   response = requests.request("POST", url, headers=headers, data=payload)
+  print(response.text)
   
   json_response = response.json()
   response_message = json_response['response']
