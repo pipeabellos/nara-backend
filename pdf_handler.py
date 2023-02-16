@@ -3,11 +3,12 @@ from io import BytesIO
 import json
 
 
-def conversation(message, context="", lastPrompt=""):
+def conversation(message, phone_number, context="", lastPrompt=""):
   url = "https://nara-conversation-usc4.zeet-nara.zeet.app/conversation"
   
   payload_data = {
-    "prompt": message
+    "prompt": message,
+    "phone_number": phone_number
   }
   
   payload_data.update({k: v for k, v in zip(("context", "lastPrompt"), (context, lastPrompt)) if v})

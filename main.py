@@ -206,7 +206,7 @@ def sms_reply():
       "lastPrompt"]
 
     response_message, context, lastPrompt = conversation(
-      body, context, lastPrompt)
+      body, int(from_number), context, lastPrompt)
     print(response_message)
 
     send_sms(str(from_number), "message", response_message)
