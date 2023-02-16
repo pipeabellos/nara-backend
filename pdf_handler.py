@@ -10,11 +10,11 @@ def conversation(message, phone_number, context="", lastPrompt=""):
     "prompt": message,
     "phone_number": phone_number
   }
-  
+  print(payload_data)
   payload_data.update({k: v for k, v in zip(("context", "lastPrompt"), (context, lastPrompt)) if v})
   
   payload = json.dumps(payload_data)
-  
+  print(payload)
   headers = {
     'Content-Type': 'application/json'
   }
