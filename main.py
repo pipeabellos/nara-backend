@@ -16,8 +16,8 @@ import dotenv
 
 dotenv.load_dotenv()
 
-airtable_api = os.environ.get("AIRTABLE_API")
-supabase_anon = os.environ.get("SUPABASE_ANON")
+airtable_api = str(os.environ.get("AIRTABLE_API"))
+supabase_anon = str(os.environ.get("SUPABASE_ANON"))
 
 
 def get_number_from_db(step, from_number=''):
@@ -53,7 +53,7 @@ def get_number_from_db(step, from_number=''):
       update_first_message_sent(record['id'], "PDFs")
       send_sms('+1' + str(record['fields']['phone']), "trained_finished")
       upsert_airtable_conversation(int(record['fields']['phone']), context="NA",
-                                   lastPrompt="NA")
+                                   lastPrompt="NA", dialogue="")
       print(record)
     print('---------')
 
@@ -87,7 +87,7 @@ def update_first_message_sent(record_id, table_name):
 
 
 def upsert_airtable_conversation(phone_number, context,
-                                 lastPrompt):
+                                 lastPrompt, dialogue):
   url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations"
 
   payload = json.dumps({
@@ -98,7 +98,8 @@ def upsert_airtable_conversation(phone_number, context,
       "fields": {
         "phone": phone_number,
         "context": context,
-        "lastPrompt": lastPrompt
+        "lastPrompt": lastPrompt,
+        "dialogue": dialogue
       }
     }]
   })
@@ -205,13 +206,13 @@ def sms_reply():
     lastPrompt = active_conversations["records"][0]["fields"][
       "lastPrompt"]
 
-    response_message, context, lastPrompt = conversation(
+    response_message, context, lastPrompt, dialogue = conversation(
       body, int(from_number), context, lastPrompt)
     print(response_message)
 
     send_sms(str(from_number), "message", response_message)
     upsert_airtable_conversation(int(from_number), context,
-                                 lastPrompt)
+                                 lastPrompt, dialogue)
 
     # Add a message
     resp = MessagingResponse()
