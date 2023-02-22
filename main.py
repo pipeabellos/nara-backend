@@ -36,8 +36,8 @@ def get_number_from_db(step, from_number=''):
       print(record)
     print('---------')
 
-  elif step == "pdf_uploaded":
-    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula=AND({first_message_sent} = '',{meal%20plan%20PDF} != '')&32q4321fields%5B%5D=phone"
+  elif step == "onboarding_form_finished":
+    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={first_message_sent} = ''&32q4321fields%5B%5D=phone"
     response = requests.request("GET", url, headers=headers, data=payload)
     print('---------')
     data = response.json()
@@ -180,8 +180,8 @@ def handle_webhook():
 
   #new phone record airtable webhook_id=achvlHuUTsPpYp4lo
   if data["webhook"]["id"] == "achvlHuUTsPpYp4lo":
-    get_number_from_db("pdf_uploaded")
-    print("Webhook received (pdf_uploaded)")
+    get_number_from_db("onboarding_form_finished")
+    print("Webhook received (onboarding_form_finished)")
     return 'Webhook received'
 
   print(data["webhook"]["id"])
