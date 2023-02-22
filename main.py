@@ -217,6 +217,20 @@ def sms_reply():
     # Add a message
     resp = MessagingResponse()
     resp.message(response_message)
+  
+  else:
+    print("From number does not exist in conversation")
+    response_message, context, lastPrompt, dialogue = conversation(
+      body, int(from_number))
+    print(response_message)
+
+    send_sms(str(from_number), "message", response_message)
+    upsert_airtable_conversation(int(from_number), context,
+                                 lastPrompt, dialogue)
+
+    # Add a message
+    resp = MessagingResponse()
+    resp.message(response_message)
 
   #return str(resp)
   print(request.get_json())
