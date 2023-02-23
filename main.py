@@ -158,7 +158,7 @@ def get_xdietpath(phone_number):
   url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={phone} = '" + str(phone_number) +"'&fields%5B%5D=dietary_id"
 
   headers = {
-  'Authorization': 'Bearer ' + airtable_key
+  'Authorization': 'Bearer ' + airtable_api
   }
 
   try:
