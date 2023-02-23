@@ -114,7 +114,7 @@ def upsert_airtable_conversation(phone_number, context,
   print(response.text)
 
 def upsert_airtable_users(phone_number):
-  url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations"
+  url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/Users"
 
   payload = json.dumps({
     "performUpsert": {
