@@ -155,21 +155,24 @@ def get_xavatarpath(phone_number):
 
 def get_xdietpath(phone_number):
 
-  url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={phone} = '" + str(phone_number) +"'&fields%5B%5D=dietary_id"
+  url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={phone} = " + str(phone_number) +"&fields%5B%5D=dietary_id"
 
   headers = {
   'Authorization': 'Bearer ' + airtable_api
   }
 
+  print(url)
+
   try:
       response = requests.request("GET", url, headers=headers)
 
       data = response.json()
-      
+      print(data)
       if data['records'] and data['records'][0]['fields'] and 'dietary_id' in data['records'][0]['fields']:
           dietary_id = data['records'][0]['fields']['dietary_id']
       else:
           dietary_id = ''
+      print(dietary_id)
       return dietary_id
 
   except Exception as e:

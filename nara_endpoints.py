@@ -13,13 +13,13 @@ def train(XAVATARPATH):
     print(response.text)
 
 
-def build_prompt(XAVATARPATH, question):
-    url = base_url + "prompt/build"
+def build_prompt(XDIETTYPE, question):
+    url = base_url + "v2/prompt/build"
     payload = json.dumps({
         "question": question
     })
     headers = {
-        'X-AVATAR-PATH': XAVATARPATH
+        'X-DIET-TYPE': XDIETTYPE
     }
     print(payload)
     print(headers)
