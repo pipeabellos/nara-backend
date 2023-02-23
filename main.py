@@ -326,7 +326,7 @@ def webhook():
       session = event['data']['object']
       phone_number = session['customer_details']['phone']
       phone_number = phone_number.replace("+", "")
-      upsert_airtable_users(phone_number)
+      upsert_airtable_users(int(phone_number))
 
     else:
       print('Unhandled event type {}'.format(event['type']))
