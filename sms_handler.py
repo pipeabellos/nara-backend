@@ -5,7 +5,7 @@ import os
 account_sid = os.environ.get("TWILIO_ACCOUNT_SID")
 auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 
-welcome_message = "Hello :) I'm Nara, your AI nutritional assistant.\n\nImagine you have a full-time healthy friend. This is a very smart friend that knows your meal plan and also knows every restaurant, their menu and the nutrition facts of a meal.\n\nUpload a picture or screenshot of the menu and we'll give you suggestions with links to buy it on doordash.\n\nFirst I need to understand your meal plan. Please upload it here: https://airtable.com/shrwrO2q0cepBaffV?hide_phone=true&prefill_phone="
+welcome_message = "Hello :) I'm Nara, your AI nutritional assistant.\n\nImagine you have a full-time healthy friend. This is a very smart friend that knows your dietary preferences and has delicioiuse recipe suggestions.\n\nBefore we start, I need to understand your preferences here: https://airtable.com/shrwrO2q0cepBaffV?hide_phone=true&prefill_phone="
 
 thanks_for_uploading_message = "Thanks for uploading your PDF. I am training myself using the provided PDF. Please hand tight, I'll let you know as soon as I'm ready in a couple of minutes."
 

@@ -13,6 +13,7 @@ from pdf_handler import train_pdf_file, conversation
 from supabase_handler import new_file
 from nara_endpoints import train, build_prompt
 import dotenv
+import stripe
 
 dotenv.load_dotenv()
 
@@ -111,6 +112,29 @@ def upsert_airtable_conversation(phone_number, context,
   response = requests.request("PATCH", url, headers=headers, data=payload)
 
   print(response.text)
+
+def upsert_airtable_users(phone_number):
+  url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations"
+
+  payload = json.dumps({
+    "performUpsert": {
+      "fieldsToMergeOn": ["phone"]
+    },
+    "records": [{
+      "fields": {
+        "phone": phone_number
+      }
+    }]
+  })
+  headers = {
+    'Authorization': 'Bearer ' + airtable_api,
+    'Content-Type': 'application/json'
+  }
+
+  response = requests.request("PATCH", url, headers=headers, data=payload)
+
+  print(response.text)
+
 
 def add_cronjob(webhook_id):
     from crontab import CronTab
@@ -273,6 +297,41 @@ def get_prompt():
   embedding = build_prompt(XDIETPATH, question)
   
   return embedding
+
+# This is your Stripe CLI webhook secret
+endpoint_secret = str(os.environ.get("STRIPE_WEBHOOK_SECRET"))
+
+@app.route('/stripe_webhook', methods=['POST'])
+def webhook():
+    event = None
+    payload = request.data
+    sig_header = request.headers['STRIPE_SIGNATURE']
+
+    print("stripe")
+    print(payload)
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        raise e
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        raise e
+
+    # Handle the event
+    if event['type'] == 'checkout.session.completed':
+      session = event['data']['object']
+      phone_number = session['customer_details']['phone']
+      phone_number = phone_number.replace("+", "")
+      upsert_airtable_users(phone_number)
+
+    else:
+      print('Unhandled event type {}'.format(event['type']))
+
+    return jsonify(success=True)
 
 web.run(app)
 if __name__ == '__main__':
