@@ -325,7 +325,7 @@ def webhook():
     if event['type'] == 'checkout.session.completed':
       session = event['data']['object']
       phone_number = session['customer_details']['phone']
-      phone_number = phone_number.replace("+", "")
+      phone_number = phone_number.replace("+1", "")
       upsert_airtable_users(int(phone_number))
 
     else:
