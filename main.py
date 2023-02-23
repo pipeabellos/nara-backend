@@ -46,9 +46,9 @@ def get_number_from_db(step, from_number=''):
       send_sms('+1' + str(record['fields']['phone']), "pdf_uploaded")
       
       # create avatar
-      XAVATARPATH = new_file(record['fields']['phone'], data['records'][0]['fields']['pdf_url'])
+      #XAVATARPATH = new_file(record['fields']['phone'], data['records'][0]['fields']['pdf_url'])
       # train avatar
-      train(XAVATARPATH)
+      #train(XAVATARPATH)
 
       # update airtable and send sms
       update_first_message_sent(record['id'], "PDFs")
