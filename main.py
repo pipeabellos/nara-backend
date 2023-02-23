@@ -140,13 +140,12 @@ def get_xavatarpath(phone_number):
   print(supabase_anon)
   url = "https://qmnzwxeqrxmuvutgedtr.supabase.co/rest/v1/hello_user_avatars?select=avatar_id,hello_avatars(url_path)&user_phone=eq." + str(phone_number) + "&order=created_at.desc&limit=1"
 
-  payload={}
   headers = {
     'apikey': supabase_anon,
     'Authorization': 'Bearer ' + supabase_anon
   }
 
-  response = requests.request("GET", url, headers=headers, data=payload)
+  response = requests.request("GET", url, headers=headers)
 
   print(response.text)
   
@@ -154,6 +153,27 @@ def get_xavatarpath(phone_number):
 
   return data[0]['hello_avatars']['url_path']
 
+def get_xdietpath(phone_number):
+
+  url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={phone} = '" + str(phone_number) +"'&fields%5B%5D=dietary_id"
+
+  headers = {
+  'Authorization': 'Bearer ' + airtable_key
+  }
+
+  try:
+      response = requests.request("GET", url, headers=headers)
+
+      data = response.json()
+      
+      if data['records'] and data['records'][0]['fields'] and 'dietary_id' in data['records'][0]['fields']:
+          dietary_id = data['records'][0]['fields']['dietary_id']
+      else:
+          dietary_id = ''
+      return dietary_id
+
+  except Exception as e:
+      return f'Request failed with exception {e}'
 
 app = Flask(__name__, static_folder='static', static_url_path='')
 
@@ -243,9 +263,9 @@ def get_prompt():
   question = data["question"]
   phone_number = data["phone"]
 
-  XAVATARPATH = get_xavatarpath(phone_number)
+  XDIETPATH = get_xdietpath(phone_number)
 
-  embedding = build_prompt(XAVATARPATH, question)
+  embedding = build_prompt(XDIETPATH, question)
   
   return embedding
 
