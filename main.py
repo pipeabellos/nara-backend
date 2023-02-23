@@ -231,6 +231,8 @@ def sms_reply():
 
     response_message, context, lastPrompt, dialogue = conversation(
       body, int(from_number), context, lastPrompt)
+    #remove <|im_end|> from response_message
+    response_message = response_message.replace("<|im_end|>", "")
     print(response_message)
 
     send_sms(str(from_number), "message", response_message)
