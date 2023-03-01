@@ -23,6 +23,7 @@ def send_sms(to_phone_number, step, response_message=""):
     message = response_message
   # The phone number to send the message from (this must be a Twilio phone number)
   from_phone_number = os.environ.get("TWILIO_SENDER_PHONE")
+  messaging_service_sid = os.environ.get("MESSAGING_SERVICE_SID")
 
   # Send the SMS message
   response = requests.post(
@@ -30,7 +31,7 @@ def send_sms(to_phone_number, step, response_message=""):
       auth=(account_sid, auth_token),
       data={
           'To': to_phone_number,
-          'From': from_phone_number,
+          'MessagingServiceSid': messaging_service_sid,
           'Body': message
       }
   )
