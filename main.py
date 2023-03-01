@@ -113,7 +113,7 @@ def upsert_airtable_conversation(phone_number, context,
 
   print(response.text)
 
-def upsert_airtable_users(phone_number):
+def upsert_airtable_users(phone_number, email, name):
   url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/Users"
 
   payload = json.dumps({
@@ -122,7 +122,9 @@ def upsert_airtable_users(phone_number):
     },
     "records": [{
       "fields": {
-        "phone": phone_number
+        "phone": phone_number,
+        "email": email,
+        "name": name
       }
     }]
   })
@@ -326,7 +328,10 @@ def webhook():
       session = event['data']['object']
       phone_number = session['customer_details']['phone']
       phone_number = phone_number.replace("+", "")
-      upsert_airtable_users(int(phone_number))
+      
+      email = session['customer_details']['email']
+      name = session['customer_details']['name']
+      upsert_airtable_users(int(phone_number), email, name)
 
     else:
       print('Unhandled event type {}'.format(event['type']))
