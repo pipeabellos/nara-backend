@@ -33,7 +33,7 @@ def get_number_from_db(step, from_number=''):
     data = response.json()
     for record in data['records']:
       update_first_message_sent(record['id'], "Users")
-      send_sms('+1' + str(record['fields']['phone']), "welcome")
+      send_sms('+' + str(record['fields']['phone']), "welcome")
       print(record)
     print('---------')
 
@@ -43,7 +43,7 @@ def get_number_from_db(step, from_number=''):
     print('---------')
     data = response.json()
     for record in data['records']:
-      send_sms('+1' + str(record['fields']['phone']), "pdf_uploaded")
+      send_sms('+' + str(record['fields']['phone']), "pdf_uploaded")
       
       # create avatar
       #XAVATARPATH = new_file(record['fields']['phone'], data['records'][0]['fields']['pdf_url'])
@@ -52,7 +52,7 @@ def get_number_from_db(step, from_number=''):
 
       # update airtable and send sms
       update_first_message_sent(record['id'], "PDFs")
-      send_sms('+1' + str(record['fields']['phone']), "trained_finished")
+      send_sms('+' + str(record['fields']['phone']), "trained_finished")
       upsert_airtable_conversation(int(record['fields']['phone']), context="NA",
                                    lastPrompt="NA", dialogue="")
       print(record)
@@ -325,7 +325,7 @@ def webhook():
     if event['type'] == 'checkout.session.completed':
       session = event['data']['object']
       phone_number = session['customer_details']['phone']
-      phone_number = phone_number.replace("+1", "")
+      phone_number = phone_number.replace("+", "")
       upsert_airtable_users(int(phone_number))
 
     else:
