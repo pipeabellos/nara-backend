@@ -31,7 +31,7 @@ def send_sms(to_phone_number, step, response_message=""):
       auth=(account_sid, auth_token),
       data={
           'To': to_phone_number,
-          'MessagingServiceSid': messaging_service_sid,
+          'From': from_phone_number,
           'Body': message
       }
   )
