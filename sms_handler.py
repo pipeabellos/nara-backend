@@ -35,6 +35,8 @@ def send_sms(to_phone_number, step, response_message=""):
           'Body': message
       }
   )
+
+  response.raise_for_status()  # raise an exception if the request fails
   
   # Print the response from the server
   print(response.content)

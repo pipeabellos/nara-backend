@@ -32,8 +32,13 @@ def get_number_from_db(step, from_number=''):
     print('---------')
     data = response.json()
     for record in data['records']:
-      update_first_message_sent(record['id'], "Users")
-      send_sms('+' + str(record['fields']['phone']), "welcome")
+      try:
+        send_sms('+' + str(record['fields']['phone']), "welcome")
+      except Exception as e:
+        print(f"Error sending SMS to {record['fields']['phone']}: {e}")
+      else:
+        update_first_message_sent(record['id'], "Users")
+        print(f"SMS sent successfully to {record['fields']['phone']}")
       print(record)
     print('---------')
 
