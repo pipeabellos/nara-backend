@@ -219,14 +219,14 @@ def handle_webhook():
   print(data)
   print(data["webhook"]["id"])
 
-  #new phone record airtable webhook_id=achWmGJCahNciLDOH
-  if data["webhook"]["id"] == "achWmGJCahNciLDOH":
+  #new phone record airtable webhook_id=ach2XvqS0gjRuU4KN
+  if data["webhook"]["id"] == "ach2XvqS0gjRuU4KN":
     get_number_from_db("onboard")
     print("Webhook received (onboard)")
     return 'Webhook received'
 
-  #new phone record airtable webhook_id=achvlHuUTsPpYp4lo
-  if data["webhook"]["id"] == "achvlHuUTsPpYp4lo":
+  #new phone record airtable webhook_id=achWhEgSQsvbiNNGD
+  if data["webhook"]["id"] == "achWhEgSQsvbiNNGD":
     get_number_from_db("onboarding_form_finished")
     print("Webhook received (onboarding_form_finished)")
     return 'Webhook received'
