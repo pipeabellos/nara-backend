@@ -226,8 +226,8 @@ def handle_webhook():
   print(data)
   print(data["webhook"]["id"])
 
-  #new phone record airtable webhook_id=ach2XvqS0gjRuU4KN
-  if data["webhook"]["id"] == "ach2XvqS0gjRuU4KN":
+  #new phone record airtable webhook_id=achpku58179pGdjM0
+  if data["webhook"]["id"] == "achpku58179pGdjM0":
     get_number_from_db("onboard")
     print("Webhook received (onboard)")
     return 'Webhook received'
