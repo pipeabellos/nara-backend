@@ -12,7 +12,7 @@ from sms_handler import send_sms
 from pdf_handler import train_pdf_file, conversation
 from supabase_handler import new_file
 from nara_endpoints import train, build_prompt
-from sendinblue_handler import create_contact
+from sendinblue_handler import create_contact, send_transactional_email
 import dotenv
 import stripe
 
@@ -350,6 +350,7 @@ def webhook():
       print("create contact")
       print(email, phone_number, first_name, last_name)
       create_contact(email, 2, "+" + str(phone_number), first_name, last_name)
+      send_transactional_email(email, 1)
 
     else:
       print('Unhandled event type {}'.format(event['type']))
