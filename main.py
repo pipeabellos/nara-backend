@@ -347,6 +347,7 @@ def webhook():
 
       first_name, last_name = separate_name(name)
       #create contact in sendinblue
+      print("create contact")
       create_contact(email, 2, "+" + str(phone_number), first_name, last_name)
 
     else:
