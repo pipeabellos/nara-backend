@@ -349,7 +349,7 @@ def webhook():
       #create contact in sendinblue
       print("create contact")
       print(email, phone_number, first_name, last_name)
-      create_contact(email, 2, "+" + str(phone_number), first_name, last_name)
+      create_contact(email, "+" + str(phone_number), first_name, last_name)
       send_transactional_email(email, 1)
 
     else:
