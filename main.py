@@ -12,6 +12,7 @@ from sms_handler import send_sms
 from pdf_handler import train_pdf_file, conversation
 from supabase_handler import new_file
 from nara_endpoints import train, build_prompt
+from sendinblue_handler import create_contact
 import dotenv
 import stripe
 
@@ -209,6 +210,12 @@ def get_xdietpath(phone_number):
   except Exception as e:
       return f'Request failed with exception {e}'
 
+def separate_name(name):
+    parts = name.split()
+    first_name = parts[0]
+    last_name = ' '.join(parts[1:])
+    return (first_name, last_name)
+
 app = Flask(__name__, static_folder='static', static_url_path='')
 
 # Main app
@@ -337,6 +344,10 @@ def webhook():
       email = session['customer_details']['email']
       name = session['customer_details']['name']
       upsert_airtable_users(int(phone_number), email, name)
+
+      first_name, last_name = separate_name(name)
+      #create contact in sendinblue
+      create_contact(email, 2, "+" + str(phone_number), first_name, last_name)
 
     else:
       print('Unhandled event type {}'.format(event['type']))
