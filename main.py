@@ -356,15 +356,10 @@ def webhook():
 
     return jsonify(success=True)
 
-@app.route('/start_crons', methods=['POST'])
-def start_cron():
-  add_cronjob("achstVAIE1UbWlCyR")
-  add_cronjob("achVOsJ8PVRaHcRwr")
-
-  return jsonify(success=True)
-
 
 
 web.run(app)
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=7070)
+  add_cronjob("achstVAIE1UbWlCyR")
+  add_cronjob("achVOsJ8PVRaHcRwr")
