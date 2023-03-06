@@ -15,6 +15,7 @@ from nara_endpoints import train, build_prompt
 from sendinblue_handler import create_contact, send_transactional_email
 import dotenv
 import stripe
+from crontab import CronTab
 
 dotenv.load_dotenv()
 
@@ -145,11 +146,10 @@ def upsert_airtable_users(phone_number, email, name):
 
 
 def add_cronjob(webhook_id):
-    from crontab import CronTab
-    import requests
+
 
     # Initialize cron
-    cron = CronTab(user='root')
+    cron = CronTab(user=True)
 
     # Define the curl command
     curl_command = 'curl -X POST "https://api.airtable.com/v0/bases/apppUZDPLKrTBobih/webhooks/' + webhook_id + '/refresh" -H "Authorization: Bearer ' + airtable_api
@@ -158,14 +158,11 @@ def add_cronjob(webhook_id):
     job = cron.new(command=curl_command)
 
     # Set the time to run the cronjob (midnight every day)
-    job.minute.every(0)
-    job.hour.every(0)
-
-    # Enable the cronjob
-    job.enable()
+    job.every(1).days()
 
     # Write the cronjob to the crontab
     cron.write()
+    os.system("crontab -l")
 
 def get_xavatarpath(phone_number):
 
