@@ -357,7 +357,8 @@ def webhook():
 
     return jsonify(success=True)
 
-
+@app.route('/health-check', methods=['GET'])
+  return jsonify(status="UP")
 
 # web.run(app)
 
