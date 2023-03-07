@@ -44,40 +44,40 @@ def get_number_from_db(step, from_number=''):
           update_first_message_sent(record['id'], "Users")
           print(f"SMS sent successfully to {record['fields']['phone']}")
         print(record)
-      return jsonify({'success': True}), 200
+      print('---------')
+
+    elif step == "onboarding_form_finished":
+      url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={first_message_sent} = ''&32q4321fields%5B%5D=phone"
+      response = requests.request("GET", url, headers=headers, data=payload)
+      print('---------')
+      data = response.json()
+      for record in data['records']:
+        send_sms('+' + str(record['fields']['phone']), "pdf_uploaded")
+        
+        # create avatar
+        #XAVATARPATH = new_file(record['fields']['phone'], data['records'][0]['fields']['pdf_url'])
+        # train avatar
+        #train(XAVATARPATH)
+
+        # update airtable and send sms
+        update_first_message_sent(record['id'], "PDFs")
+        send_sms('+' + str(record['fields']['phone']), "trained_finished")
+        upsert_airtable_conversation(int(record['fields']['phone']), context="NA",
+                                    lastPrompt="NA", dialogue="")
+        print(record)
+      print('---------')
+
+    elif step == "conversation":
+      url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations?view=Grid%20view&filterByFormula={phone}=" + str(from_number)
+      response = requests.request("GET", url, headers=headers, data=payload)
+      print('---------')
+      data = response.json()
+      print(data)
+      return (data)
+  
   except Exception as e:
     print(f"Error: {e}")
-  return jsonify({'success': False}), 200
-
-  elif step == "onboarding_form_finished":
-    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/PDFs?view=Grid%20view&filterByFormula={first_message_sent} = ''&32q4321fields%5B%5D=phone"
-    response = requests.request("GET", url, headers=headers, data=payload)
-    print('---------')
-    data = response.json()
-    for record in data['records']:
-      send_sms('+' + str(record['fields']['phone']), "pdf_uploaded")
-      
-      # create avatar
-      #XAVATARPATH = new_file(record['fields']['phone'], data['records'][0]['fields']['pdf_url'])
-      # train avatar
-      #train(XAVATARPATH)
-
-      # update airtable and send sms
-      update_first_message_sent(record['id'], "PDFs")
-      send_sms('+' + str(record['fields']['phone']), "trained_finished")
-      upsert_airtable_conversation(int(record['fields']['phone']), context="NA",
-                                   lastPrompt="NA", dialogue="")
-      print(record)
-    print('---------')
-
-  elif step == "conversation":
-    url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/conversations?view=Grid%20view&filterByFormula={phone}=" + str(from_number)
-    response = requests.request("GET", url, headers=headers, data=payload)
-    print('---------')
-    data = response.json()
-    print(data)
-    return (data)
-
+    return ("Error: " + str(e), 200)
 
 def update_first_message_sent(record_id, table_name):
   url = "https://api.airtable.com/v0/apppUZDPLKrTBobih/" + table_name
