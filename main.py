@@ -358,8 +358,10 @@ def webhook():
 
 
 
-web.run(app)
-add_cronjob("achstVAIE1UbWlCyR")
-add_cronjob("achVOsJ8PVRaHcRwr")
+# web.run(app)
+
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=7070)
+  add_cronjob("achstVAIE1UbWlCyR")
+  add_cronjob("achVOsJ8PVRaHcRwr")
+  print("Done")
