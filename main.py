@@ -20,6 +20,7 @@ from crontab import CronTab
 dotenv.load_dotenv()
 
 airtable_api = str(os.environ.get("AIRTABLE_API"))
+airtable__webhook_api = str(os.environ.get("AIRTABLE_WEBHOOK_API"))
 supabase_anon = str(os.environ.get("SUPABASE_ANON"))
 
 
@@ -152,7 +153,7 @@ def add_cronjob(webhook_id):
     cron = CronTab(user=True)
 
     # Define the curl command
-    curl_command = 'curl -X POST "https://api.airtable.com/v0/bases/apppUZDPLKrTBobih/webhooks/' + webhook_id + '/refresh" -H "Authorization: Bearer ' + airtable_api
+    curl_command = 'curl -X POST "https://api.airtable.com/v0/bases/apppUZDPLKrTBobih/webhooks/' + webhook_id + '/refresh" -H "Authorization: Bearer ' + airtable__webhook_api
 
     # Add the cronjob
     job = cron.new(command=curl_command)
@@ -361,8 +362,8 @@ def webhook():
 # web.run(app)
 
 if __name__ == '__main__':
-  add_cronjob("achstVAIE1UbWlCyR")
-  add_cronjob("achVOsJ8PVRaHcRwr")
+  add_cronjob("achWhEgSQsvbiNNGD")
+  add_cronjob("achpku58179pGdjM0")
   print("Done")
   app.run(host='0.0.0.0', port=7070)
 
