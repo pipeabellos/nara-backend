@@ -235,8 +235,8 @@ def handle_webhook():
   print(data)
   print(data["webhook"]["id"])
 
-  #new phone record airtable webhook_id=achdkHRA3gaSx5MtQ
-  if data["webhook"]["id"] == "achdkHRA3gaSx5MtQ":
+  #new phone record airtable webhook_id=ach9XAGmNs5EbGwbt
+  if data["webhook"]["id"] == "ach9XAGmNs5EbGwbt":
     get_number_from_db("onboard")
     print("Webhook received (onboard)")
     return 'Webhook received'
@@ -369,7 +369,7 @@ def health_check():
 
 if __name__ == '__main__':
   add_cronjob("achWhEgSQsvbiNNGD")
-  add_cronjob("achdkHRA3gaSx5MtQ")
+  add_cronjob("ach9XAGmNs5EbGwbt")
   print("Done")
   app.run(host='0.0.0.0', port=7070)
 
