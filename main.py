@@ -257,14 +257,13 @@ def sms_reply():
   print(from_number)
   active_conversations = get_number_from_db("conversation", from_number)
   #Check if from_number exists in
-  if active_conversations["records"] != []:
+  records = active_conversations.get("records")
+  if records != []:
     print("From number exists in conversation")
-    print(active_conversations["records"][0]["fields"]["context"])
-    context = active_conversations["records"][0]["fields"][
-      "context"]
-    lastPrompt = active_conversations["records"][0]["fields"][
-      "lastPrompt"]
-
+    context = records[0]["fields"].get("context") or ""
+    lastPrompt = records[0]["fields"].get("lastPrompt") or ""
+    print(context)
+    print("""Last prompt was""" + str(lastPrompt))
     response_message, context, lastPrompt, dialogue = conversation(
       body, int(from_number), context, lastPrompt)
     #remove <|im_end|> from response_message
